@@ -1,0 +1,1879 @@
+{
+  "metadata": {
+    "video_source": "demo_4.mov",
+    "fps": 27.671755725190838,
+    "duration": 15.647724137931036,
+    "frames_analyzed": 87,
+    "doors_detected": 73,
+    "state_changes": 14,
+    "processing_time_seconds": 40,
+    "cost_savings_usd": 22.45,
+    "narration_events": 14,
+    "generated_at": "2026-02-08T08:28:44.161969",
+    "model": "World2Data_Ultimate_v1.0"
+  },
+  "ground_truth": [
+    {
+      "timestamp": 0.0,
+      "frame_index": 0,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 0.18,
+      "frame_index": 5,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 0.36,
+      "frame_index": 10,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 0.54,
+      "frame_index": 15,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 0.72,
+      "frame_index": 20,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 0.9,
+      "frame_index": 25,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.08,
+      "frame_index": 30,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.26,
+      "frame_index": 35,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.45,
+      "frame_index": 40,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.63,
+      "frame_index": 45,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.81,
+      "frame_index": 50,
+      "objects": [],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 1.99,
+      "frame_index": 55,
+      "objects": [
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            426.26,
+            202.82,
+            588.59,
+            1140.89
+          ],
+          "confidence": 0.44
+        }
+      ],
+      "human_action": "person_present",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 2.17,
+      "frame_index": 60,
+      "objects": [
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            362.03,
+            176.69,
+            581.88,
+            1145.38
+          ],
+          "confidence": 0.778
+        }
+      ],
+      "human_action": "person_present",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 2.35,
+      "frame_index": 65,
+      "objects": [
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            312.02,
+            184.74,
+            594.62,
+            1144.98
+          ],
+          "confidence": 0.874
+        }
+      ],
+      "human_action": "person_present",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 2.53,
+      "frame_index": 70,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.477
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            259.06,
+            166.78,
+            611.79,
+            1142.02
+          ],
+          "confidence": 0.878
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 2.71,
+      "frame_index": 75,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            224.16,
+            127.73,
+            647.33,
+            1149.14
+          ],
+          "confidence": 0.879
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 2.89,
+      "frame_index": 80,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            198.62,
+            52.31,
+            663.69,
+            1149.01
+          ],
+          "confidence": 0.923
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 3.07,
+      "frame_index": 85,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            184.35,
+            0.0,
+            663.13,
+            1145.46
+          ],
+          "confidence": 0.904
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 3.25,
+      "frame_index": 90,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            199.46,
+            12.02,
+            661.67,
+            1141.11
+          ],
+          "confidence": 0.89
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 3.43,
+      "frame_index": 95,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            152.99,
+            16.21,
+            661.86,
+            1145.39
+          ],
+          "confidence": 0.801
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 3.61,
+      "frame_index": 100,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            166.94,
+            0.0,
+            665.43,
+            1146.22
+          ],
+          "confidence": 0.858
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 3.79,
+      "frame_index": 105,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            73.61,
+            0.0,
+            662.24,
+            1146.77
+          ],
+          "confidence": 0.889
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "closed",
+        "to_state": "open"
+      }
+    },
+    {
+      "timestamp": 3.98,
+      "frame_index": 110,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            29.62,
+            95.28,
+            662.13,
+            1148.95
+          ],
+          "confidence": 0.813
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 4.16,
+      "frame_index": 115,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            105.99,
+            3.57,
+            666.52,
+            1149.87
+          ],
+          "confidence": 0.739
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 4.34,
+      "frame_index": 120,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 4.52,
+      "frame_index": 125,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "open",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 4.7,
+      "frame_index": 130,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 4.88,
+      "frame_index": 135,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "closed"
+      }
+    },
+    {
+      "timestamp": 5.06,
+      "frame_index": 140,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 5.24,
+      "frame_index": 145,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 5.42,
+      "frame_index": 150,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "closed",
+        "to_state": "open"
+      }
+    },
+    {
+      "timestamp": 5.6,
+      "frame_index": 155,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "open",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 5.78,
+      "frame_index": 160,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 5.96,
+      "frame_index": 165,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 6.14,
+      "frame_index": 170,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 6.32,
+      "frame_index": 175,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 6.5,
+      "frame_index": 180,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "open"
+      }
+    },
+    {
+      "timestamp": 6.69,
+      "frame_index": 185,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 6.87,
+      "frame_index": 190,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 7.05,
+      "frame_index": 195,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 7.23,
+      "frame_index": 200,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 7.41,
+      "frame_index": 205,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 7.59,
+      "frame_index": 210,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "open",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 7.77,
+      "frame_index": 215,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            284.61,
+            174.11,
+            610.13,
+            1140.67
+          ],
+          "confidence": 0.868
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "closed"
+      }
+    },
+    {
+      "timestamp": 7.95,
+      "frame_index": 220,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            154.11,
+            139.17,
+            648.95,
+            1144.38
+          ],
+          "confidence": 0.901
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "closed",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 8.13,
+      "frame_index": 225,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            119.99,
+            146.52,
+            596.91,
+            1148.64
+          ],
+          "confidence": 0.905
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "open"
+      }
+    },
+    {
+      "timestamp": 8.31,
+      "frame_index": 230,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        },
+        {
+          "type": "person",
+          "affordance": "dynamic_agent",
+          "bbox": [
+            186.26,
+            650.66,
+            643.45,
+            1149.49
+          ],
+          "confidence": 0.716
+        }
+      ],
+      "human_action": "at_door",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "open",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 8.49,
+      "frame_index": 235,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 8.67,
+      "frame_index": 240,
+      "objects": [
+        {
+          "type": "door",
+          "state": "closed",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "closed"
+      }
+    },
+    {
+      "timestamp": 8.85,
+      "frame_index": 245,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "closed",
+        "to_state": "partially_open"
+      }
+    },
+    {
+      "timestamp": 9.03,
+      "frame_index": 250,
+      "objects": [
+        {
+          "type": "door",
+          "state": "partially_open",
+          "affordance": "blocked",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 9.22,
+      "frame_index": 255,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": {
+        "type": "door_state_change",
+        "from_state": "partially_open",
+        "to_state": "open"
+      }
+    },
+    {
+      "timestamp": 9.4,
+      "frame_index": 260,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 9.58,
+      "frame_index": 265,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 9.76,
+      "frame_index": 270,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 9.94,
+      "frame_index": 275,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 10.12,
+      "frame_index": 280,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 10.3,
+      "frame_index": 285,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 10.48,
+      "frame_index": 290,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 10.66,
+      "frame_index": 295,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 10.84,
+      "frame_index": 300,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.02,
+      "frame_index": 305,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.2,
+      "frame_index": 310,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.38,
+      "frame_index": 315,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.56,
+      "frame_index": 320,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.74,
+      "frame_index": 325,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 11.93,
+      "frame_index": 330,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 12.11,
+      "frame_index": 335,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 12.29,
+      "frame_index": 340,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 12.47,
+      "frame_index": 345,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 12.65,
+      "frame_index": 350,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 12.83,
+      "frame_index": 355,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.01,
+      "frame_index": 360,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.19,
+      "frame_index": 365,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.37,
+      "frame_index": 370,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.55,
+      "frame_index": 375,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.73,
+      "frame_index": 380,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 13.91,
+      "frame_index": 385,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 14.09,
+      "frame_index": 390,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 14.27,
+      "frame_index": 395,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 14.46,
+      "frame_index": 400,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 14.64,
+      "frame_index": 405,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 14.82,
+      "frame_index": 410,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 15.0,
+      "frame_index": 415,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 15.18,
+      "frame_index": 420,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 15.36,
+      "frame_index": 425,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    },
+    {
+      "timestamp": 15.54,
+      "frame_index": 430,
+      "objects": [
+        {
+          "type": "door",
+          "state": "open",
+          "affordance": "traversable",
+          "bbox": [
+            339,
+            511,
+            528,
+            819
+          ],
+          "confidence": 0.382
+        }
+      ],
+      "human_action": "unknown",
+      "interaction_event": null
+    }
+  ],
+  "narration": [
+    {
+      "timestamp": 3.7944827586206897,
+      "text": "Door state change detected: closed to open"
+    },
+    {
+      "timestamp": 4.517241379310345,
+      "text": "Door state change detected: open to partially_open"
+    },
+    {
+      "timestamp": 4.878620689655173,
+      "text": "Door state change detected: partially_open to closed"
+    },
+    {
+      "timestamp": 5.420689655172414,
+      "text": "Door state change detected: closed to open"
+    },
+    {
+      "timestamp": 5.601379310344828,
+      "text": "Door state change detected: open to partially_open"
+    },
+    {
+      "timestamp": 6.504827586206897,
+      "text": "Door state change detected: partially_open to open"
+    },
+    {
+      "timestamp": 7.5889655172413795,
+      "text": "Door state change detected: open to partially_open"
+    },
+    {
+      "timestamp": 7.769655172413794,
+      "text": "Door state change detected: partially_open to closed"
+    },
+    {
+      "timestamp": 7.950344827586207,
+      "text": "Door state change detected: closed to partially_open"
+    },
+    {
+      "timestamp": 8.13103448275862,
+      "text": "Door state change detected: partially_open to open"
+    },
+    {
+      "timestamp": 8.311724137931035,
+      "text": "Door state change detected: open to partially_open"
+    },
+    {
+      "timestamp": 8.673103448275862,
+      "text": "Door state change detected: partially_open to closed"
+    },
+    {
+      "timestamp": 8.853793103448277,
+      "text": "Door state change detected: closed to partially_open"
+    },
+    {
+      "timestamp": 9.215172413793104,
+      "text": "Door state change detected: partially_open to open"
+    }
+  ]
+}
