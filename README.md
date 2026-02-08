@@ -105,12 +105,3 @@ If AI can generate ground truth at scale:
 **Before robots can navigate the human world, they must first understand what the world means.**
 
 World2Data builds that understanding.
-
-## 🏆 HackNation AI Hackathon - VC Track
-Built in <2 hours to demonstrate the future of humanoid robot training data.
-
----
-
-**Team**: [Your Team Name]
-**Track**: Venture Capital
-**Challenge**: World2Data - Physical World Ground Truth
