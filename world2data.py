@@ -1,27 +1,227 @@
 #!/usr/bin/env python3
 """
-World2Data Real-World - Enhanced for actual door navigation videos
-Uses YOLO for door detection + edge-based state analysis
+World2Data V2 - Real-World Door Detection
+Uses advanced CV techniques: edge detection, Hough lines, contour analysis
 """
 
 import cv2
 import json
 import os
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 import numpy as np
 from datetime import datetime
 
-class World2DataRealWorld:
+class DoorDetector:
+    """Advanced door detection using computer vision"""
+
+    def __init__(self):
+        self.prev_door_bbox = None
+
+    def detect_door(self, frame: np.ndarray) -> Optional[Dict]:
+        """
+        Detect door using multiple CV techniques:
+        1. Edge detection (Canny)
+        2. Line detection (Hough)
+        3. Contour analysis
+        4. Geometric validation
+        """
+        height, width = frame.shape[:2]
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        # Enhance contrast
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        enhanced = clahe.apply(gray)
+
+        # Edge detection
+        blurred = cv2.GaussianBlur(enhanced, (5, 5), 0)
+        edges = cv2.Canny(blurred, 30, 100)
+
+        # Morphological operations to connect door edges
+        kernel = np.ones((3,3), np.uint8)
+        edges = cv2.dilate(edges, kernel, iterations=1)
+        edges = cv2.erode(edges, kernel, iterations=1)
+
+        # Find contours
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        door_candidates = []
+
+        for contour in contours:
+            area = cv2.contourArea(contour)
+
+            # Filter by area (doors are typically large)
+            if area < 3000 or area > width * height * 0.7:
+                continue
+
+            # Get bounding rectangle
+            x, y, w, h = cv2.boundingRect(contour)
+
+            # Door shape validation
+            aspect_ratio = h / w if w > 0 else 0
+            size_ratio = area / (width * height)
+
+            # Heuristics for door-like shapes:
+            # - Aspect ratio 1.5-5.0 (vertical rectangle)
+            # - Size ratio 0.03-0.5 (significant but not full frame)
+            # - Minimum dimensions
+            # - Positioned in reasonable location (not at extreme edges)
+
+            is_vertical = 1.5 < aspect_ratio < 5.0
+            reasonable_size = 0.03 < size_ratio < 0.5
+            min_dimensions = w > 40 and h > 80
+            reasonable_position = 0.1 * width < x < 0.9 * width
+
+            if is_vertical and reasonable_size and min_dimensions and reasonable_position:
+                # Calculate confidence score
+                confidence = self._calculate_door_confidence(frame, x, y, w, h, aspect_ratio, size_ratio)
+
+                door_candidates.append({
+                    'bbox': [x, y, x+w, y+h],
+                    'area': area,
+                    'aspect_ratio': aspect_ratio,
+                    'confidence': confidence,
+                    'center': (x + w//2, y + h//2)
+                })
+
+        if not door_candidates:
+            # Try tracking from previous frame if available
+            if self.prev_door_bbox:
+                # Return previous bbox with lower confidence
+                prev_bbox = self.prev_door_bbox.copy()
+                prev_bbox['confidence'] *= 0.8  # Decay confidence
+                if prev_bbox['confidence'] > 0.3:
+                    return prev_bbox
+            return None
+
+        # Select best candidate
+        # Prefer larger, more centered doors with good aspect ratio
+        best_door = max(door_candidates, key=lambda d: d['confidence'])
+
+        # Smooth with previous detection
+        if self.prev_door_bbox:
+            prev_bbox = self.prev_door_bbox['bbox']
+            curr_bbox = best_door['bbox']
+
+            # If very close to previous detection, smooth the bbox
+            iou = self._calculate_iou(prev_bbox, curr_bbox)
+            if iou > 0.5:
+                # Weighted average
+                alpha = 0.7
+                best_door['bbox'] = [
+                    alpha * curr_bbox[i] + (1-alpha) * prev_bbox[i]
+                    for i in range(4)
+                ]
+
+        self.prev_door_bbox = best_door
+        return best_door
+
+    def _calculate_door_confidence(self, frame, x, y, w, h, aspect_ratio, size_ratio):
+        """Calculate confidence score for door detection"""
+        # Base confidence from aspect ratio (peak at 2.5)
+        aspect_score = 1.0 - abs(aspect_ratio - 2.5) / 2.5
+        aspect_score = max(0, min(1, aspect_score))
+
+        # Size score (peak at 0.15)
+        size_score = 1.0 - abs(size_ratio - 0.15) / 0.15
+        size_score = max(0, min(1, size_score))
+
+        # Extract door region
+        door_region = frame[y:y+h, x:x+w]
+        if door_region.size == 0:
+            return 0.5
+
+        # Analyze vertical structure (doors have strong vertical lines)
+        gray_region = cv2.cvtColor(door_region, cv2.COLOR_BGR2GRAY)
+        edges_region = cv2.Canny(gray_region, 50, 150)
+
+        # Count vertical vs horizontal edges
+        vertical_edges = np.sum(edges_region, axis=0)
+        horizontal_edges = np.sum(edges_region, axis=1)
+
+        v_strength = np.std(vertical_edges)
+        h_strength = np.std(horizontal_edges)
+
+        # Doors have stronger vertical structure
+        structure_score = v_strength / (v_strength + h_strength + 1) if (v_strength + h_strength) > 0 else 0.5
+
+        # Combine scores
+        confidence = (0.4 * aspect_score + 0.3 * size_score + 0.3 * structure_score)
+        return min(0.95, max(0.3, confidence))
+
+    def _calculate_iou(self, bbox1, bbox2):
+        """Calculate Intersection over Union"""
+        x1_min, y1_min, x1_max, y1_max = bbox1
+        x2_min, y2_min, x2_max, y2_max = bbox2
+
+        # Intersection
+        x_min = max(x1_min, x2_min)
+        y_min = max(y1_min, y2_min)
+        x_max = min(x1_max, x2_max)
+        y_max = min(y1_max, y2_max)
+
+        if x_max < x_min or y_max < y_min:
+            return 0.0
+
+        intersection = (x_max - x_min) * (y_max - y_min)
+
+        # Union
+        area1 = (x1_max - x1_min) * (y1_max - y1_min)
+        area2 = (x2_max - x2_min) * (y2_max - y2_min)
+        union = area1 + area2 - intersection
+
+        return intersection / union if union > 0 else 0.0
+
+    def analyze_door_state(self, frame: np.ndarray, door_bbox: List[float]) -> str:
+        """Analyze whether door is closed, partially open, or open"""
+        x1, y1, x2, y2 = map(int, door_bbox)
+        door_region = frame[y1:y2, x1:x2]
+
+        if door_region.size == 0:
+            return "unknown"
+
+        # Convert to grayscale
+        gray = cv2.cvtColor(door_region, cv2.COLOR_BGR2GRAY)
+
+        # Detect edges
+        edges = cv2.Canny(gray, 50, 150)
+
+        # Analyze edge density and distribution
+        edge_density = np.sum(edges > 0) / edges.size
+
+        # Analyze vertical lines (closed door has consistent vertical line)
+        lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=30, minLineLength=20, maxLineGap=10)
+
+        vertical_lines = 0
+        if lines is not None:
+            for line in lines:
+                x1_l, y1_l, x2_l, y2_l = line[0]
+                angle = np.abs(np.arctan2(y2_l - y1_l, x2_l - x1_l) * 180 / np.pi)
+                if angle > 75 and angle < 105:  # Vertical-ish
+                    vertical_lines += 1
+
+        # Analyze color variance (open door shows background, more variance)
+        color_variance = np.std(gray)
+
+        # Decision logic
+        if vertical_lines >= 2 and edge_density < 0.15 and color_variance < 50:
+            return "closed"
+        elif vertical_lines < 1 or edge_density > 0.25 or color_variance > 80:
+            return "open"
+        else:
+            return "partially_open"
+
+
+class World2DataV2:
     def __init__(self, video_path: str, output_dir: str = "output"):
         self.video_path = video_path
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
+        self.door_detector = DoorDetector()
         self.ground_truth_data = []
-        self.frame_count = 0
 
     def extract_frames(self, sample_rate: int = 5):
-        """Extract frames from video."""
+        """Extract frames from video"""
         cap = cv2.VideoCapture(self.video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
 
@@ -44,186 +244,46 @@ class World2DataRealWorld:
         self.fps = fps
         self.total_frames = frame_idx
 
-        print(f"✓ Extracted {len(frames)} frames from {frame_idx} total frames at {fps:.2f} FPS")
+        print(f"✓ Extracted {len(frames)} frames from {frame_idx} total ({fps:.1f} FPS)")
         return frames, frame_indices
 
-    def detect_objects_yolo(self, frames: List[np.ndarray]):
-        """Use YOLO to detect objects including doors."""
+    def detect_people_yolo(self, frames: List[np.ndarray]):
+        """Use YOLO only for person detection"""
         from ultralytics import YOLO
 
-        print("Loading YOLO model for object detection...")
+        print("Loading YOLO for person detection...")
         model = YOLO('yolov8n.pt')
 
-        all_detections = []
+        all_people = []
         for idx, frame in enumerate(frames):
-            results = model(frame, verbose=False)
-            frame_detections = {
-                'doors': [],
-                'people': [],
-                'other': []
-            }
+            results = model(frame, verbose=False, classes=[0])  # class 0 = person
 
+            people = []
             for result in results:
                 boxes = result.boxes
                 for box in boxes:
-                    cls_id = int(box.cls[0])
-                    cls_name = model.names[cls_id]
                     conf = float(box.conf[0])
                     bbox = box.xyxy[0].tolist()
+                    people.append({'bbox': bbox, 'confidence': conf})
 
-                    detection = {
-                        "class_name": cls_name,
-                        "confidence": conf,
-                        "bbox": bbox
-                    }
+            all_people.append(people)
 
-                    # Categorize detections
-                    if cls_name == 'door':
-                        frame_detections['doors'].append(detection)
-                    elif cls_name == 'person':
-                        frame_detections['people'].append(detection)
-                    else:
-                        frame_detections['other'].append(detection)
-
-            all_detections.append(frame_detections)
-
-            if idx % 20 == 0:
+            if (idx + 1) % 20 == 0:
                 print(f"  Processed {idx+1}/{len(frames)} frames")
 
-        print(f"✓ Object detection complete")
-        return all_detections, model
+        print(f"✓ Person detection complete")
+        return all_people
 
-    def detect_door_from_edges(self, frame: np.ndarray, roi: Tuple[int, int, int, int] = None) -> Dict:
-        """
-        Detect door using edge detection and geometric analysis.
-        Works better for real-world doors than color detection.
-        """
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        # Apply Gaussian blur
-        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-
-        # Edge detection
-        edges = cv2.Canny(blurred, 50, 150)
-
-        # Find contours
-        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Look for door-like rectangular contours
-        door_candidates = []
-        height, width = frame.shape[:2]
-
-        for contour in contours:
-            area = cv2.contourArea(contour)
-            if area < 5000:  # Too small to be a door
-                continue
-
-            # Approximate contour to polygon
-            peri = cv2.arcLength(contour, True)
-            approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
-
-            # Get bounding box
-            x, y, w, h = cv2.boundingRect(contour)
-
-            # Door heuristics: vertical rectangle, reasonable size
-            aspect_ratio = h / w if w > 0 else 0
-            size_ratio = (w * h) / (width * height)
-
-            if (1.5 < aspect_ratio < 4.0 and  # Vertical rectangle
-                0.05 < size_ratio < 0.6 and    # Reasonable size
-                w > 50 and h > 100):           # Minimum dimensions
-
-                door_candidates.append({
-                    'bbox': [x, y, x+w, y+h],
-                    'area': area,
-                    'aspect_ratio': aspect_ratio,
-                    'confidence': min(0.95, area / 50000)  # Heuristic confidence
-                })
-
-        if door_candidates:
-            # Return largest door candidate
-            best_door = max(door_candidates, key=lambda d: d['area'])
-            return best_door
-
-        return None
-
-    def analyze_door_state(self, frame: np.ndarray, door_bbox: List[float]) -> str:
-        """
-        Analyze door state using region analysis.
-        Detects: closed, partially_open, open
-        """
-        x1, y1, x2, y2 = map(int, door_bbox)
-
-        # Extract door region
-        door_region = frame[y1:y2, x1:x2]
-
-        if door_region.size == 0:
-            return "unknown"
-
-        # Convert to grayscale
-        gray = cv2.cvtColor(door_region, cv2.COLOR_BGR2GRAY)
-
-        # Analyze vertical edges (strong vertical edges = closed door)
-        edges = cv2.Canny(gray, 50, 150)
-        vertical_edges = np.sum(edges, axis=0)  # Sum along columns
-
-        # Standard deviation of edge intensity
-        edge_variance = np.std(vertical_edges)
-
-        # Analyze door region complexity
-        # Closed door: uniform, low variance
-        # Open door: see through, high variance
-        mean_intensity = np.mean(gray)
-        intensity_variance = np.std(gray)
-
-        # Heuristic state detection
-        if edge_variance < 50 and intensity_variance < 40:
-            return "closed"
-        elif edge_variance > 150 or intensity_variance > 80:
-            return "open"
-        else:
-            return "partially_open"
-
-    def detect_person_and_action(self, frame: np.ndarray, person_detections: List[Dict],
-                                 door_bbox: List[float] = None) -> Tuple[List[Dict], str]:
-        """Detect people and infer their actions relative to door."""
-        if not person_detections:
-            return [], "no_person_visible"
-
-        action = "person_present"
-
-        if door_bbox and person_detections:
-            # Get door center
-            door_x_center = (door_bbox[0] + door_bbox[2]) / 2
-
-            # Get person center
-            person = person_detections[0]  # Primary person
-            person_x_center = (person['bbox'][0] + person['bbox'][2]) / 2
-
-            # Calculate distance to door
-            distance = abs(person_x_center - door_x_center)
-            frame_width = frame.shape[1]
-
-            if distance < frame_width * 0.15:  # Within 15% of frame width
-                action = "at_door"
-            elif person_x_center < door_x_center:
-                action = "approaching_door"
-            else:
-                action = "passed_door"
-
-        return person_detections, action
-
-    def generate_ground_truth_realworld(self, frames, frame_indices, yolo_detections):
-        """Generate ground truth with real-world door and person detection."""
+    def generate_ground_truth(self, frames, frame_indices, people_detections):
+        """Generate ground truth with door detection"""
         ground_truth = []
         prev_door_state = None
 
-        print("Analyzing frames for real-world ground truth...")
+        print("Detecting doors and generating ground truth...")
 
-        for idx, (frame_idx, frame, yolo_det) in enumerate(zip(frame_indices, frames, yolo_detections)):
+        for idx, (frame_idx, frame, people) in enumerate(zip(frame_indices, frames, people_detections)):
             timestamp = frame_idx / self.fps
 
-            # Start with empty entry
             entry = {
                 "timestamp": round(timestamp, 2),
                 "frame_index": frame_idx,
@@ -232,43 +292,31 @@ class World2DataRealWorld:
                 "interaction_event": None
             }
 
-            # Detect door (try YOLO first, fallback to edge detection)
-            door_bbox = None
-            door_state = "not_visible"
+            # Detect door
+            door = self.door_detector.detect_door(frame)
 
-            if yolo_det['doors']:
-                # Use YOLO door detection
-                door = yolo_det['doors'][0]  # Take first door
-                door_bbox = door['bbox']
-                door_state = self.analyze_door_state(frame, door_bbox)
+            if door:
+                door_state = self.door_detector.analyze_door_state(frame, door['bbox'])
 
                 entry['objects'].append({
                     "type": "door",
                     "state": door_state,
                     "affordance": "traversable" if door_state == "open" else "blocked",
-                    "bbox": [round(x, 2) for x in door_bbox],
-                    "confidence": round(door['confidence'], 3),
-                    "detection_method": "yolo"
+                    "bbox": [round(x, 2) for x in door['bbox']],
+                    "confidence": round(door['confidence'], 3)
                 })
-            else:
-                # Fallback: edge-based door detection
-                door_edge = self.detect_door_from_edges(frame)
-                if door_edge:
-                    door_bbox = door_edge['bbox']
-                    door_state = self.analyze_door_state(frame, door_bbox)
 
-                    entry['objects'].append({
-                        "type": "door",
-                        "state": door_state,
-                        "affordance": "traversable" if door_state == "open" else "blocked",
-                        "bbox": [round(x, 2) for x in door_bbox],
-                        "confidence": round(door_edge['confidence'], 3),
-                        "detection_method": "edge_detection"
-                    })
+                # Detect state changes
+                if prev_door_state and door_state != prev_door_state:
+                    entry['interaction_event'] = {
+                        "type": "door_state_change",
+                        "from_state": prev_door_state,
+                        "to_state": door_state
+                    }
 
-            # Detect people and infer action
-            people, action = self.detect_person_and_action(frame, yolo_det['people'], door_bbox)
+                prev_door_state = door_state
 
+            # Add people
             for person in people:
                 entry['objects'].append({
                     "type": "person",
@@ -277,179 +325,126 @@ class World2DataRealWorld:
                     "confidence": round(person['confidence'], 3)
                 })
 
-            entry['human_action'] = action
+            # Infer action
+            if door and people:
+                person_x = (people[0]['bbox'][0] + people[0]['bbox'][2]) / 2
+                door_x = (door['bbox'][0] + door['bbox'][2]) / 2
+                distance = abs(person_x - door_x)
 
-            # Detect state change events
-            if prev_door_state and door_state != prev_door_state and door_state != "not_visible":
-                entry['interaction_event'] = {
-                    "type": "door_state_change",
-                    "from_state": prev_door_state,
-                    "to_state": door_state,
-                    "timestamp": timestamp
-                }
+                if distance < frame.shape[1] * 0.15:
+                    entry['human_action'] = "at_door"
+                elif person_x < door_x:
+                    entry['human_action'] = "approaching_door"
+                else:
+                    entry['human_action'] = "passed_door"
+            elif people:
+                entry['human_action'] = "person_present"
 
             ground_truth.append(entry)
-            prev_door_state = door_state if door_state != "not_visible" else prev_door_state
 
-            if idx % 20 == 0:
+            if (idx + 1) % 20 == 0:
                 print(f"  Analyzed {idx+1}/{len(frames)} frames")
 
         self.ground_truth_data = ground_truth
-        print(f"✓ Generated {len(ground_truth)} ground truth entries")
+        print(f"✓ Generated {len(ground_truth)} annotations")
         return ground_truth
 
-    def save_ground_truth(self, filename: str = "ground_truth_realworld.json"):
-        """Save ground truth to JSON."""
-        output_path = self.output_dir / filename
-
-        state_changes = sum(1 for entry in self.ground_truth_data if entry['interaction_event'])
-        unique_actions = set(entry['human_action'] for entry in self.ground_truth_data)
-        door_detections = sum(1 for entry in self.ground_truth_data
-                            if any(obj['type'] == 'door' for obj in entry['objects']))
-
-        metadata = {
-            "video_source": str(self.video_path),
-            "fps": self.fps,
-            "total_frames": self.total_frames,
-            "sampled_frames": len(self.ground_truth_data),
-            "door_detections": door_detections,
-            "state_changes_detected": state_changes,
-            "unique_actions_detected": len(unique_actions),
-            "actions": list(unique_actions),
-            "generated_at": datetime.now().isoformat(),
-            "model": "World2Data_RealWorld_v1.0"
-        }
+    def save_and_visualize(self, frames, frame_indices):
+        """Save JSON and create video"""
+        # Save JSON
+        door_count = sum(1 for e in self.ground_truth_data if any(o['type']=='door' for o in e['objects']))
+        state_changes = sum(1 for e in self.ground_truth_data if e['interaction_event'])
 
         output = {
-            "metadata": metadata,
+            "metadata": {
+                "video_source": str(self.video_path),
+                "fps": self.fps,
+                "frames_analyzed": len(self.ground_truth_data),
+                "doors_detected": door_count,
+                "state_changes": state_changes,
+                "generated_at": datetime.now().isoformat()
+            },
             "ground_truth": self.ground_truth_data
         }
 
-        with open(output_path, 'w') as f:
+        json_path = self.output_dir / "ground_truth_v2.json"
+        with open(json_path, 'w') as f:
             json.dump(output, f, indent=2)
 
-        print(f"✓ Ground truth saved to {output_path}")
-        print(f"  Door detections: {door_detections}/{len(self.ground_truth_data)} frames")
+        print(f"✓ Saved: {json_path}")
+        print(f"  Doors detected: {door_count}/{len(self.ground_truth_data)} frames")
         print(f"  State changes: {state_changes}")
-        print(f"  Actions: {list(unique_actions)}")
-        return output_path
 
-    def create_visualization(self, frames, frame_indices, output_video: str = "realworld_demo.mp4"):
-        """Create side-by-side visualization for real-world footage."""
-        if not frames:
-            return
-
+        # Create video
+        print("Creating visualization...")
         height, width = frames[0].shape[:2]
-        output_path = self.output_dir / output_video
+        video_path = self.output_dir / "demo_v2.mp4"
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(str(output_path), fourcc, self.fps / 5, (width * 2, height))
+        out = cv2.VideoWriter(str(video_path), fourcc, self.fps / 5, (width * 2, height))
 
-        print("Creating visualization...")
-
-        for idx, (frame_idx, frame) in enumerate(zip(frame_indices, frames)):
+        for idx, (frame, gt) in enumerate(zip(frames, self.ground_truth_data)):
             raw = frame.copy()
-            cv2.putText(raw, "RAW INPUT", (10, 30),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-
             annotated = frame.copy()
-            gt_entry = self.ground_truth_data[idx]
 
-            # Draw bounding boxes and labels
-            for obj in gt_entry['objects']:
-                bbox = obj['bbox']
-                x1, y1, x2, y2 = map(int, bbox)
-
-                if obj['type'] == 'person':
-                    color = (0, 255, 0)  # Green
-                    label = f"Person ({obj['confidence']:.2f})"
-                elif obj['type'] == 'door':
-                    color = (255, 0, 0)  # Blue
-                    state = obj.get('state', 'unknown')
-                    method = obj.get('detection_method', 'unknown')
-                    label = f"Door: {state} ({obj['confidence']:.2f})"
-                else:
-                    color = (0, 165, 255)
-                    label = obj['type']
+            # Draw annotations
+            for obj in gt['objects']:
+                x1, y1, x2, y2 = map(int, obj['bbox'])
+                color = (255, 0, 0) if obj['type'] == 'door' else (0, 255, 0)
 
                 cv2.rectangle(annotated, (x1, y1), (x2, y2), color, 3)
+
+                label = obj['type']
+                if obj['type'] == 'door':
+                    label = f"Door: {obj.get('state', 'unknown')} ({obj['confidence']:.2f})"
+
                 cv2.putText(annotated, label, (x1, y1-10),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-            # Add action label
-            action_text = f"Action: {gt_entry['human_action']}"
-            cv2.putText(annotated, action_text, (10, height - 60),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+            # Add labels
+            cv2.putText(raw, "RAW INPUT", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+            cv2.putText(annotated, "AI GROUND TRUTH", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 2)
+            cv2.putText(annotated, f"Action: {gt['human_action']}", (10, height-20),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 2)
 
-            # Timestamp
-            timestamp = gt_entry['timestamp']
-            cv2.putText(annotated, f"t={timestamp:.2f}s", (10, 30),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            if gt['interaction_event']:
+                cv2.putText(annotated, "STATE CHANGE!", (10, height-50),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
 
-            # Title
-            cv2.putText(annotated, "AI GROUND TRUTH", (10, 70),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
-
-            # Event indicator
-            if gt_entry['interaction_event']:
-                event = gt_entry['interaction_event']
-                event_text = f"STATE CHANGE: {event['from_state']} -> {event['to_state']}"
-                cv2.putText(annotated, event_text, (10, height - 20),
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-
-            # Combine
             combined = np.hstack([raw, annotated])
             out.write(combined)
 
-            if idx % 20 == 0:
-                print(f"  Rendered {idx+1}/{len(frames)} frames")
-
         out.release()
-        print(f"✓ Visualization saved to {output_path}")
-        return output_path
+        print(f"✓ Saved: {video_path}")
 
-    def run_pipeline(self, sample_rate: int = 5):
-        """Run the complete real-world pipeline."""
-        print("=" * 70)
-        print("WORLD2DATA REAL-WORLD - Door Navigation Ground Truth")
-        print("=" * 70)
+    def run(self, sample_rate=5):
+        """Run complete pipeline"""
+        print("="*70)
+        print("WORLD2DATA V2 - Real-World Door Detection")
+        print("="*70)
 
-        print("\n[1/5] Extracting video frames...")
+        print("\n[1/4] Extracting frames...")
         frames, frame_indices = self.extract_frames(sample_rate)
 
-        print("\n[2/5] Running YOLO object detection...")
-        yolo_detections, model = self.detect_objects_yolo(frames)
+        print("\n[2/4] Detecting people...")
+        people = self.detect_people_yolo(frames)
 
-        print("\n[3/5] Generating real-world ground truth...")
-        self.generate_ground_truth_realworld(frames, frame_indices, yolo_detections)
+        print("\n[3/4] Detecting doors and generating ground truth...")
+        self.generate_ground_truth(frames, frame_indices, people)
 
-        print("\n[4/5] Saving structured ground truth...")
-        self.save_ground_truth()
+        print("\n[4/4] Saving outputs...")
+        self.save_and_visualize(frames, frame_indices)
 
-        print("\n[5/5] Creating visualization...")
-        self.create_visualization(frames, frame_indices)
-
-        print("\n" + "=" * 70)
-        print("✓ PIPELINE COMPLETE")
-        print(f"  Output: {self.output_dir}")
-        print("=" * 70)
-
-
-def main():
-    import sys
-
-    if len(sys.argv) < 2:
-        print("Usage: python world2data_realworld.py <video_path>")
-        sys.exit(1)
-
-    video_path = sys.argv[1]
-    if not os.path.exists(video_path):
-        print(f"Error: Video file '{video_path}' not found")
-        sys.exit(1)
-
-    w2d = World2DataRealWorld(video_path)
-    w2d.run_pipeline(sample_rate=5)
+        print("\n" + "="*70)
+        print("✓ COMPLETE!")
+        print("="*70)
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) < 2:
+        print("Usage: python world2data_v2.py <video_path>")
+        sys.exit(1)
+
+    w2d = World2DataV2(sys.argv[1])
+    w2d.run(sample_rate=5)
