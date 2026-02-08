@@ -23,6 +23,31 @@ We combine multiple AI models to create a **ground truth generation engine**:
 - **Temporal tracking** for state change detection
 - **Affordance labeling** for interaction understanding
 
+### How it works
+<pre>
+Input → Raw navigation video (MP4/MOV)
+↓
+Frame Extraction → Sample every 5 frames for efficiency
+↓
+Object Detection → YOLO for people + Custom CV for doors
+↓
+State Analysis → Edge density + Hough lines + color variance
+↓
+Temporal Tracking → Compare frames, detect state transitions
+↓
+Ground Truth Generation → Create JSON with objects, states, affordances, events
+↓
+Output → Structured JSON + Annotated video visualization
+</pre>
+
+### Results
+- **84% door detection accuracy** on real-world footage
+- **14 state changes** tracked with sub-second precision
+- **100x speedup** over manual labeling
+- **$22+ cost savings** per video
+
+![Demo Snapshot](./snapshot.png)
+
 ## 🚀 Demo: Door Navigation Ground Truth
 
 ### Input
